@@ -1,0 +1,62 @@
+﻿@model IEnumerable<ManagerHotel.Models.Service>
+
+@{
+    ViewBag.Title = "ListService";
+}
+
+<h2>ListService</h2>
+
+<p>
+    @*@Html.ActionLink("Create New", "Create")*@
+    <button class="btn btn-info" onclick="location.href='@Url.Action("Create")'">Create New</button>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsAvailable)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceTypeId)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsAvailable)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ServiceTypeId)
+        </td>
+        <td>
+            @*@Html.ActionLink("Edit", "Edit", new { id = item.ServiceId }) |
+            @Html.ActionLink("Details", "Details", new { id = item.ServiceId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.ServiceId })*@
+
+            <button class="btn btn-info" onclick="location.href='@Url.Action("Edit", "Service", new { id = item.ServiceId })'">Edit</button>
+            <button class="btn btn-secondary" onclick="location.href='@Url.Action("Details", "Service", new { id = item.ServiceId })'">Details</button>
+            <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Service", new { id = item.ServiceId })'">Delete</button>
+        </td>
+    </tr>
+}
+
+</table>
