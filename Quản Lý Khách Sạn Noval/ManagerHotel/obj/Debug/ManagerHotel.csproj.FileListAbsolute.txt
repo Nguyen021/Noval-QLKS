@@ -218,3 +218,4 @@ C:\Users\Nguyen0210\OneDrive - nhn1909\Desktop\BTL\Quản Lý Khách Sạn Noval
 C:\Users\Nguyen0210\OneDrive - nhn1909\Desktop\BTL\Quản Lý Khách Sạn Noval\ManagerHotel\obj\Debug\ManagerHotel.Migrations.AddData.resources
 C:\Users\Nguyen0210\OneDrive - nhn1909\Desktop\BTL\Quản Lý Khách Sạn Noval\ManagerHotel\obj\Debug\ManagerHotel.Migrations.ChangemodelBookingandsetrelatedmodelservicevsreceipt.resources
 C:\Users\Nguyen0210\OneDrive - nhn1909\Desktop\BTL\Quản Lý Khách Sạn Noval\ManagerHotel\obj\Debug\ManagerHotel.Migrations.alterservicesmodelcolumnisAvailable.resources
+C:\Users\Nguyen0210\OneDrive - nhn1909\Desktop\BTL\Quản Lý Khách Sạn Noval\ManagerHotel\obj\Debug\ManagerHotel.csproj.AssemblyReference.cache

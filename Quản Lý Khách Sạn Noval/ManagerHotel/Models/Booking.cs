@@ -29,6 +29,7 @@ namespace ManagerHotel.Models
         //public virtual User User { get; set; }
         [Range(1, 2, ErrorMessage = "Type chỉ có thể là  1 nhân viên đặt, 2 khách đặt online")]
         public int Type { get; set; }
+
         [Required]
         public int RoomId { get; set; }
         public Room Room { get; set; }

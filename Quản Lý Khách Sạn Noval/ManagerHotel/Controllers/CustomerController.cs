@@ -1,11 +1,13 @@
-﻿using ManagerHotel.Models;
+﻿using ManagerHotel.Authentication;
+using ManagerHotel.Models;
 using System;
 using System.Linq;
 using System.Web.Mvc;
 
 namespace ManagerHotel.Controllers
 {
-    public class CustomerController : Controller
+    [MyAuthorize]
+    public class CustomerController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Customer
@@ -16,6 +18,7 @@ namespace ManagerHotel.Controllers
 
         public ActionResult ListCustomer()
         {
+            AddUserToViewBag();
             var c = db.Customers.ToList();
             return View(c);
 
@@ -25,6 +28,7 @@ namespace ManagerHotel.Controllers
         // GET: Customer/Details/5
         public ActionResult Details(int id)
         {
+            AddUserToViewBag();
             var c = db.Customers.FirstOrDefault(ro => ro.CustomerId == id);
             return View(c);
         }
@@ -32,6 +36,7 @@ namespace ManagerHotel.Controllers
         // GET: Customer/Create
         public ActionResult Create()
         {
+            AddUserToViewBag();
             return View();
         }
 
@@ -39,15 +44,38 @@ namespace ManagerHotel.Controllers
         [HttpPost]
         public ActionResult Create(FormCollection collection, Customer c)
         {
+            var existingCustomer = db.Customers.FirstOrDefault(x => x.Email == c.Email);
+            var existingIdentityCard = db.Customers.FirstOrDefault(x => x.IdentityCard == c.IdentityCard);
+            var existingPhoneNumber = db.Customers.FirstOrDefault(x => x.PhoneNumber == c.PhoneNumber);
+            if (existingCustomer != null)
+            {
+                ViewBag.Error = "Email đã tồn tại!";
+                return View(c);
+            }
+            if (existingIdentityCard != null)
+            {
+                ViewBag.Error = "IdentityCard đã tồn tại!";
+                return View(c);
+            }
+            if (existingPhoneNumber != null)
+            {
+                ViewBag.Error = "PhoneNumber đã tồn tại!";
+                return View(c);
+            }
+            if (ModelState.IsValid)
+            {
+                db.Customers.Add(c);
+                db.SaveChanges();
+                return RedirectToAction("ListCustomer");
+            }
 
-            db.Customers.Add(c);
-            db.SaveChanges();
-            return RedirectToAction("ListCustomer");
+            return View(c);
         }
 
         // GET: Customer/Edit/5
         public ActionResult Edit(int id)
         {
+            AddUserToViewBag();
             var c = db.Customers.First(r => r.CustomerId == id);
             return View(c);
         }
@@ -78,6 +106,7 @@ namespace ManagerHotel.Controllers
         // GET: Customer/Delete/5
         public ActionResult Delete(int id)
         {
+            AddUserToViewBag();
             var c = db.Customers.First(r => r.CustomerId == id);
             return View(c);
         }
@@ -92,11 +121,15 @@ namespace ManagerHotel.Controllers
                 db.Customers.Remove(c);
                 db.SaveChanges();
                 return RedirectToAction("ListCustomer");
-            }
+
+                  }
             catch
             {
+                ViewBag.ErrorMessage = "Bạn không thế xóa Customer được tham chiếu đến bảng User. Nếu bạn vẫn muốn tiếp tục hãy xóa dữ liệu liên quan và quay lại sau";
+               
                 return View();
             }
+          
         }
     }
 }

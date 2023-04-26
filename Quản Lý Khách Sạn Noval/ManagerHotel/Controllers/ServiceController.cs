@@ -1,4 +1,5 @@
-﻿using ManagerHotel.Models;
+﻿using ManagerHotel.Authentication;
+using ManagerHotel.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,8 @@ using System.Web.Mvc;
 
 namespace ManagerHotel.Controllers
 {
-    public class ServiceController : Controller
+    [MyAuthorize]
+    public class ServiceController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Service
@@ -17,12 +19,14 @@ namespace ManagerHotel.Controllers
         }
         public ActionResult ListService()
         {
+            AddUserToViewBag();
             var services = db.Services.ToList();
             return View(services);
         }
         // GET: Service/Details/5
         public ActionResult Details(int id)
         {
+            AddUserToViewBag();
             var s = db.Services.Where(sv => sv.ServiceId == id).FirstOrDefault();
             var r2 = db.Services.FirstOrDefault(sv => sv.ServiceId == id);
             return View(s);
@@ -32,6 +36,7 @@ namespace ManagerHotel.Controllers
         // GET: Service/Create
         public ActionResult Create()
         {
+            AddUserToViewBag();
             //var svTypeIds = db.ServiceTypes.Select(r => r.ServiceTypeId).ToList();
             //ViewBag.ServiceTypeIds = svTypeIds;
 
@@ -65,6 +70,7 @@ namespace ManagerHotel.Controllers
         // GET: Service/Edit/5
         public ActionResult Edit(int id)
         {
+            AddUserToViewBag();
             var service = db.Services.First(s => s.ServiceId == id);
 
             ViewBag.ServiceTypeList = new SelectList(db.ServiceTypes, "ServiceTypeId", "Name");
@@ -83,6 +89,7 @@ namespace ManagerHotel.Controllers
             {
                 sv.Price = decimal.Round(price, 2);
             }
+         
             sv.IsAvailable = collection["IsAvailable"];
             sv.ServiceTypeId = int.Parse(collection["ServiceTypeId"]);
 
@@ -93,6 +100,7 @@ namespace ManagerHotel.Controllers
         // GET: Service/Delete/5
         public ActionResult Delete(int id)
         {
+            AddUserToViewBag();
             var service = db.Services.First(s => s.ServiceId == id);
             return View(service);
         }

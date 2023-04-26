@@ -9,6 +9,10 @@
 <h3>Bạn có chắn chắn muốn xóa Khách hàng này</h3>
 <div>
     <h4>Customer</h4>
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+    }
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -53,13 +57,14 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
-<div class="form-actions no-color">
-    <input type="submit" value="Delete" class="btn btn-warning" /> 
-    @*@Html.ActionLink("Back to List", "Index")*@
-    <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("ListCustomer")'">Back to List</button>
-</div>
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-warning" />
+            @*@Html.ActionLink("Back to List", "Index")*@
+            <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("ListCustomer")'">Back to List</button>
+        </div>
     }
 </div>

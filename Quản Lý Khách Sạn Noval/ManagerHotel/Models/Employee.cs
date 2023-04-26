@@ -10,20 +10,20 @@ namespace ManagerHotel.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EmployeeId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Tên nhân viên không được để trống")]
         [StringLength(255)]
         public string Name { get; set; }
-
+       
         [StringLength(255)]
         public string Email { get; set; }
-
-        [StringLength(10)]
+   
+        [StringLength(10, ErrorMessage = "Số điện thoại không được quá 10 ký tự.")]
         public string PhoneNumber { get; set; }
 
         [StringLength(50)]
         public string Position { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Lương nhân viên không được để trống")]
         public decimal Salary { get; set; }
 
         public DateTime HireDate { get; set; }

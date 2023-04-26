@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "BookRoom";
+}
+
+<h2>BookRoom</h2>
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+    <h2>Đặt phòng Thất bại</h2>
+}
+else {
+<h2>Đặt phòng thành công</h2>
+<p>Mã đặt phòng của bạn là: @ViewBag.BookingId</p>
+<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>
+}
+
+<div>
+
+    @*@Html.ActionLink("Back to List", "Index")*@
+    <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("Index", "Home")'"><span class="glyphicon glyphicon-log-in"></span> Trang Chủ</button>
+</div>

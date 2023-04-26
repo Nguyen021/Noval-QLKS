@@ -13,8 +13,10 @@
     <!-- Jumbotron -->
     <div class="p-4 shadow-4 rounded-3" style="background-color: hsl(0, 0%, 94%);">
         <h3>
-            Chào mừng đến với khách sạn Noval - Bỏ Lại Sự Miệt Mỏi  @ViewBag.Username
+            Chào mừng đến với khách sạn Noval - Bỏ Lại Sự Miệt Mỏi <small>
+    @ViewBag.Username
             @ViewBag.UserType
+        </small> 
         </h3>
 
         <p>
@@ -34,9 +36,10 @@
             }*@
         @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { @class = "form-inline" }))
         {
-            <div class="form-group">
-                @Html.TextBox("SearchString", null, new { @class = "form-control mr-sm-2", placeholder = "Find by name" })
+            <div class="form-group" >
+                @Html.TextBox("SearchString", null, new { @class = "form-control mr-sm-2", placeholder = "Tìm phòng bạn mong muốn ...", style = "width: 300px;" })
             </div>
+            
             <button type="submit" class="btn btn-primary">Search</button>
         }
 
@@ -75,15 +78,28 @@
                     {
                         <img src="@Url.Content(room.Image)" class="card-img-top" alt="Image" style="width:100%;height:300px" />
                     }
-                    <div class="card-body">
-                        <h5 class="card-title">Số Phòng: @room.RoomNumber</h5>
-                        <p class="card-text">@room.Description</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">@room.Price.ToString("C0")/night</small>
-                            <a href="@Url.Action("Details", "Room", new { id = room.RoomId })" class="btn btn-sm btn-outline-secondary">View details</a>
-                        </div>
-                        <a href="#" class="btn btn-primary">Đặt Phòng Ngay</a>
+                <div class="card-body">
+                    <h5 class="card-title">Số Phòng: @room.RoomNumber</h5>
+                    <p class="card-text">@room.Description</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">@room.Price.ToString("C0")/night</small>
+                        <a href="@Url.Action("Details", "Room", new { id = room.RoomId })" class="btn btn-sm btn-outline-secondary">View details</a>
                     </div>
+
+                    @if (ViewBag.User != null)
+                    {
+                        @*<a href="#" class="btn btn-primary">Đặt Phòng Ngay</a>
+                    <a href="#" class="btn btn-primary" onclick="bookRoom(@Model.Id)">Đặt Phòng Ngay</a>*@
+                    <button class="btn btn-danger" onclick="location.href='@Url.Action("BookRoom", "Home", new { id=room.RoomId, checkInDate= DateTime.Now, price=room.Price })'">Đặt Phòng Ngay</button>
+
+                    }
+                    @*<a href="#" class="btn btn-primary" id="book-room-btn" data-room-id="@room.Id" data-checkin-date="@checkInDate" data-checkout-date="@checkOutDate" data-price="@room.Price">Đặt Phòng Ngay</a>*@
+
+                    else
+                    {
+                    <a href="@Url.Action("Login", "User")">Đăng nhập để đặt phòng</a>}
+
+                </div>
                 </div>
             </div>
         </div>

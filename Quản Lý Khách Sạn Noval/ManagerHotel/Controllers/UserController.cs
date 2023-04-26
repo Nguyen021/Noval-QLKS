@@ -1,4 +1,5 @@
-﻿using ManagerHotel.Configs;
+﻿using ManagerHotel.Authentication;
+using ManagerHotel.Configs;
 using ManagerHotel.Models;
 using System.Linq;
 using System.Web;
@@ -7,7 +8,8 @@ using System.Web.Security;
 
 namespace ManagerHotel.Controllers
 {
-    public class UserController : Controller
+    
+    public class UserController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: User
@@ -103,7 +105,7 @@ namespace ManagerHotel.Controllers
         {
             // Xóa cookies của người dùng
             ManagerCookies.RemoveUserIdFromCookies();
-
+            Session.Remove("User");
             // Điều hướng về trang chủ
             return RedirectToAction("Login", "User");
         }

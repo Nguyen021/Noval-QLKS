@@ -1,13 +1,17 @@
-﻿using ManagerHotel.Models;
+﻿using ManagerHotel.Authentication;
+using ManagerHotel.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
 namespace ManagerHotel.Controllers
 {
-    public class EmployeeController : Controller
+    [MyAuthorize]
+    public class EmployeeController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Employee
@@ -15,8 +19,63 @@ namespace ManagerHotel.Controllers
         {
             return View();
         }
+        public bool ValidateEmployeeData(FormCollection collection, Employee e)
+        {
+            var name = collection["Name"];
+            var position = collection["Position"];
+            var phoneNumber = collection["PhoneNumber"];
+            var email = collection["Email"];
+            var address = collection["Address"];
+            var hireDate = collection["HireDate"];
+
+            if (string.IsNullOrEmpty(phoneNumber))
+            {
+                ModelState.AddModelError("PhoneNumber", "Số điện thoại không được để trống");
+            }
+
+            if (string.IsNullOrEmpty(name))
+            {
+                ModelState.AddModelError("Name", "Tên nhân viên không được để trống");
+            }
+
+            if (string.IsNullOrEmpty(position))
+            {
+                ModelState.AddModelError("Position", "Vị trí nhân viên không được để trống");
+            }
+
+            if (string.IsNullOrEmpty(hireDate))
+            {
+                ModelState.AddModelError("HireDate", "Ngày Thuê nhân viên không được để trống");
+            }
+
+            if (string.IsNullOrEmpty(email))
+            {
+                ModelState.AddModelError("Email", "Email nhân viên không được để trống");
+            }
+
+            if (string.IsNullOrEmpty(address))
+            {
+                ModelState.AddModelError("Address", "Đại chỉ nhân viên không được để trống");
+            }
+
+            DateTime hireDateValue;
+            hireDateValue = DateTime.Parse(collection["HireDate"]);
+                    
+
+            if (hireDateValue == null)
+            {
+                ModelState.AddModelError("HireDate", "Ngày tháng không đúng định dạng.");
+            }
+            else
+            {
+                e.HireDate = hireDateValue;
+            }
+
+            return ModelState.IsValid;
+        }
         public ActionResult ListEmployee()
         {
+            AddUserToViewBag();
             var employees = db.Employees.ToList();
             return View(employees);
           
@@ -24,6 +83,7 @@ namespace ManagerHotel.Controllers
         // GET: Employee/Details/5
         public ActionResult Details(int id)
         {
+            AddUserToViewBag();
             var e = db.Employees.FirstOrDefault(ro => ro.EmployeeId == id);
             return View(e);
         }
@@ -31,6 +91,7 @@ namespace ManagerHotel.Controllers
         // GET: Employee/Create
         public ActionResult Create()
         {
+            AddUserToViewBag();
             return View();
         }
 
@@ -39,31 +100,28 @@ namespace ManagerHotel.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(FormCollection collection, Employee e)
         {
-            //DateTime hireDate;
-            //bool isValidDate = DateTime.TryParseExact(
-            //    collection["HireDate"],
-            //    "MM/dd/yyyy",
-            //    CultureInfo.InvariantCulture,
-            //    DateTimeStyles.None,
-            //    out hireDate);
-
-            //if (!isValidDate)
-            //{
-            //    ModelState.AddModelError("HireDate", "Invalid date format.");
-            //}
-            //else
-            //{
-            //    e.HireDate = hireDate;
-            //}
-            e.HireDate = DateTime.Parse(String.Format("{0:MM/dd/yyyy}", collection["HireDate"]));
-            db.Employees.Add(e);
-            db.SaveChanges();
-            return RedirectToAction("ListEmployee");
+            if (ModelState.IsValid)
+            {
+                if (!ValidateEmployeeData(collection, e))
+                {
+                    ViewBag.ErrorMsg = "Hãy cung cấp đúng các thông tin";
+                    return View(e);
+                }
+               
+                    db.Employees.Add(e);
+                    db.SaveChanges();
+                    return RedirectToAction("ListEmployee");
+                
+                
+            }
+            return this.View();
+           
         }
-
+          
         // GET: Employee/Edit/5
         public ActionResult Edit(int id)
         {
+            AddUserToViewBag();
             var e = db.Employees.First(r => r.EmployeeId == id);
             return View(e);
            
@@ -80,7 +138,16 @@ namespace ManagerHotel.Controllers
                 e.Email = collection["Email"];
                 e.PhoneNumber = collection["PhoneNumber"];
                 e.Position = collection["Position"];
-                e.HireDate = DateTime.Parse(String.Format("{0:MM/dd/yyyy}", collection["HireDate"]));
+                DateTime hireDate = DateTime.Parse(collection["HireDate"]);
+
+                if (hireDate == null)
+                {
+                    ModelState.AddModelError("HireDate", "Ngày tháng không đúng định dạng.");
+                }
+                else
+                {
+                    e.HireDate = hireDate;
+                }
                 if (decimal.TryParse(collection["Salary"], out decimal price))
                 {
                     e.Salary = decimal.Round(price, 2);
@@ -92,7 +159,7 @@ namespace ManagerHotel.Controllers
             catch (Exception ex)
             {
                 ViewBag.ErrorMessage = ex.Message;
-                return View();
+                return this.View();
             }
         
         }
@@ -100,6 +167,7 @@ namespace ManagerHotel.Controllers
         // GET: Employee/Delete/5
         public ActionResult Delete(int id)
         {
+            AddUserToViewBag();
             var e = db.Employees.First(r => r.EmployeeId == id);
             return View(e);
         }

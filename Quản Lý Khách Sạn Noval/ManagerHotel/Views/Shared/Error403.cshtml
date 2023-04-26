@@ -1,0 +1,13 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    ViewBag.Title = "Access Denied";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Access Denied</h1>
+<p>Hãy liên hệ quản trị viên và quay lại sau. Xin cảm ơn</p>
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("Index", "Home")'"><span class="glyphicon glyphicon-log-in"></span> Trang Chủ</button>
+
+

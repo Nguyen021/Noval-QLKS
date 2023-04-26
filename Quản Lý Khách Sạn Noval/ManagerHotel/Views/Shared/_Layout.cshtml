@@ -24,11 +24,22 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
-                    
+
+                    @if (@ViewBag.User != null)
+                    {
                     <li>@Html.ActionLink("QL Phòng", "ListRoom", "Room")</li>
                     <li>@Html.ActionLink("QL Dịch Vụ", "ListService", "Service")</li>
                     <li>@Html.ActionLink("QL Khách Hàng", "ListCustomer", "Customer")</li>
                     <li>@Html.ActionLink("QL Nhân Viên", "ListEmployee", "Employee")</li>
+
+                    }
+                    
+
+                    @*<li>@Html.ActionLink("QL Phòng", "ListRoom", "Room")</li>
+                    <li>@Html.ActionLink("QL Dịch Vụ", "ListService", "Service")</li>
+                    <li>@Html.ActionLink("QL Khách Hàng", "ListCustomer", "Customer")</li>
+                    <li>@Html.ActionLink("QL Nhân Viên", "ListEmployee", "Employee")</li>*@
+
 
                 </ul>
                 
